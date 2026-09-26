@@ -998,3 +998,376 @@ void SinglyCL<T>::DeleteAtPos(int iPos)
         {
             temp1 = temp1 -> next;
         }
+        temp2 = (temp1-> next);
+        temp1 -> next = temp2 ->next;
+        free(temp2);
+        
+
+        iCount--;
+    }
+}
+
+/////////////////////////////////////////////////////////////
+//
+// Code of Stack
+//
+/////////////////////////////////////////////////////////////
+
+
+template <class T>
+struct nodeSK
+{
+    T data;
+    struct nodeSK * next;
+};
+
+template <class T>
+class Stack
+{
+    private:
+        struct nodeSK<T> * First;
+        int iCount;
+
+    public:
+        Stack();
+        void Display();
+        int Count();
+        void Push(T No);  // InsertFirst()
+        int Pop();   // DeleteFirst()
+};
+
+template <class T>
+Stack<T> :: Stack()
+{
+    First = NULL;
+    iCount = 0;
+}
+
+template <class T>
+void Stack<T> ::Display()
+{
+    cout<<"Elements of stack are : \n";
+    struct nodeSK<T> * temp = First;
+
+    while(temp != NULL)
+    {
+        cout<<temp->data<<"\n";
+        temp = temp -> next;
+    }
+    cout<<"\n";
+}
+
+template <class T>
+int Stack<T> ::Count()
+{
+    return iCount;
+}
+
+template <class T>
+void Stack<T> ::Push(T No)
+{
+    struct nodeSK<T> * newn = NULL;
+
+    newn = new nodeSK<T>;
+
+    newn->data = No;
+    newn->next = NULL;
+
+    if(First == NULL)
+    {
+        First = newn;
+    }
+    else
+    {
+        newn->next = First;
+        First = newn;
+    }
+    iCount++;
+}
+
+template <class T>
+int Stack<T> ::Pop()
+{
+    int iValue = 0;
+    struct nodeSK<T> * temp = NULL;
+
+    if(First == NULL)
+    {
+        cout<<"Unable to pop the element as stack is empty\n";
+        return -1;
+    }
+    else
+    {
+        temp = First;
+
+        iValue = First -> data;
+        First = First -> next;
+        delete temp;
+        
+        iCount--;
+    }
+
+    return iValue;
+}
+
+
+/////////////////////////////////////////////////////////////
+//
+// Code of Queue
+//
+/////////////////////////////////////////////////////////////
+
+template <class T>
+struct nodeQue
+{
+    T data;
+    struct nodeQue * next;
+};
+
+template <class T>
+class Queue
+{
+    private:
+        struct nodeQue<T> * First;
+        int iCount;
+
+    public:
+        Queue();
+        void Display();
+        int Count();
+        void EnQueue(T No);  // InsertLast()
+        int DeQueue();   // DeleteFirst()
+};
+
+template <class T>
+Queue<T> :: Queue()
+{
+    First = NULL;
+    iCount = 0;
+}
+
+template <class T>
+void Queue<T> ::Display()
+{
+    cout<<"Elements of Queue are : \n";
+    struct nodeQue<T> * temp = First;
+
+    while(temp != NULL)
+    {
+        cout<<temp->data<<"\t";
+        temp = temp -> next;
+    }
+    cout<<"\n";
+}
+
+template <class T>
+int Queue<T> ::Count()
+{
+    return iCount;
+}
+
+template <class T>
+void Queue<T> ::EnQueue(T No)
+{
+    struct nodeQue<T> * newn = NULL;
+    struct nodeQue<T> * temp = NULL;
+
+    newn = new nodeQue<T>;
+
+    newn->data = No;
+    newn->next = NULL;
+
+    if(First == NULL)
+    {
+        First = newn;
+    }
+    else
+    {
+        temp = First;
+
+        while(temp ->next != NULL)
+        {
+            temp = temp -> next;
+        }
+
+        temp->next = newn;
+    }
+    iCount++;
+}
+
+template <class T>
+int Queue<T> ::DeQueue()
+{
+    int iValue = 0;
+    struct nodeQue<T> * temp = NULL;
+
+    if(First == NULL)
+    {
+        cout<<"Unable to remove the element as queue is empty\n";
+        return -1;
+    }
+    else
+    {
+        temp = First;
+
+        iValue = First -> data;
+        First = First -> next;
+        delete temp;
+        
+        iCount--;
+    }
+
+    return iValue;
+}
+
+int main()
+{
+    // LL of integer
+    cout<<"-------------- LinkdList of Integers --------------\n";
+
+    SinglyLL<int> *iobj = new SinglyLL<int>();
+    int iRet = 0;
+
+    iobj->InsertFirst(51);
+    iobj->InsertFirst(21);
+    iobj->InsertFirst(11);
+
+    iobj->Display();
+    iRet = iobj->Count();
+    cout<<"Number of elemensts are : "<<iRet<<endl;
+
+    iobj->InsertLast(101);
+    iobj->InsertLast(111);
+    iobj->InsertLast(121);
+    
+    iobj->Display();
+    iRet = iobj->Count();
+    cout<<"Number of elemensts are : "<<iRet<<endl;
+
+    iobj->InsertAtPos(105,5);
+
+    iobj->Display();
+    iRet = iobj->Count();
+    cout<<"Number of elemensts are : "<<iRet<<endl;
+
+    iobj->DeleteAtPos(5);
+    iobj->Display();
+    iRet = iobj->Count();
+    cout<<"Number of elemensts are : "<<iRet<<endl;
+
+    // LL of character
+    cout<<"-------------- LinkdList of Chracters --------------\n";
+
+    SinglyLL<char> *cobj = new SinglyLL<char>();
+
+    cobj->InsertFirst('D');
+    cobj->InsertFirst('F');
+    cobj->InsertFirst('R');
+
+    cobj->Display();
+    iRet = cobj->Count();
+    cout<<"Number of elemensts are : "<<iRet<<endl;
+
+    cobj->InsertLast('E');
+    cobj->InsertLast('Y');
+    cobj->InsertLast('U');
+    
+    cobj->Display();
+    iRet = cobj->Count();
+    cout<<"Number of elemensts are : "<<iRet<<endl;
+
+    cobj->InsertAtPos('W',5);
+
+    cobj->Display();
+    iRet = cobj->Count();
+    cout<<"Number of elemensts are : "<<iRet<<endl;
+
+    cobj->DeleteAtPos(5);
+    cobj->Display();
+    iRet = cobj->Count();
+    cout<<"Number of elemensts are : "<<iRet<<endl;
+
+    // LL of float
+    cout<<"-------------- LinkdList of Floats --------------\n";
+
+    SinglyLL<float> *fobj = new SinglyLL<float>();
+
+    fobj->InsertFirst(90.78f);
+    fobj->InsertFirst(78.99f);
+    fobj->InsertFirst(67.99f);
+
+    fobj->Display();
+    iRet = fobj->Count();
+    cout<<"Number of elemensts are : "<<iRet<<endl;
+
+    fobj->InsertLast(45.67f);
+    fobj->InsertLast(54.78f);
+    fobj->InsertLast(77.89f);
+    
+    fobj->Display();
+    iRet = fobj->Count();
+    cout<<"Number of elemensts are : "<<iRet<<endl;
+
+    fobj->InsertAtPos(88.56,5);
+
+    fobj->Display();
+    iRet = fobj->Count();
+    cout<<"Number of elemensts are : "<<iRet<<endl;
+
+    fobj->DeleteAtPos(5);
+    fobj->Display();
+    iRet = fobj->Count();
+    cout<<"Number of elemensts are : "<<iRet<<endl;
+
+    // LL of double
+
+    cout<<"-------------- LinkdList of Doubles --------------\n";
+
+    SinglyLL<double> *dobj = new SinglyLL<double>();
+
+    dobj->InsertFirst(90.78978);
+    dobj->InsertFirst(78.99645);
+    dobj->InsertFirst(67.9934);
+
+    dobj->Display();
+    iRet = dobj->Count();
+    cout<<"Number of elemensts are : "<<iRet<<endl;
+
+    dobj->InsertLast(45.67867);
+    dobj->InsertLast(54.78534);
+    dobj->InsertLast(77.89324);
+    
+    dobj->Display();
+    iRet = dobj->Count();
+    cout<<"Number of elemensts are : "<<iRet<<endl;
+
+    dobj->InsertAtPos(88.56987,5);
+
+    dobj->Display();
+    iRet = dobj->Count();
+    cout<<"Number of elemensts are : "<<iRet<<endl;
+
+    dobj->DeleteAtPos(5);
+    dobj->Display();
+    iRet = dobj->Count();
+    cout<<"Number of elemensts are : "<<iRet<<endl;
+
+    DoublyCL<int> *idobj = new DoublyCL<int>();
+
+    idobj->InsertFirst(51);
+    idobj->InsertFirst(21);
+    idobj->InsertFirst(11);
+    
+    idobj->InsertLast(101);
+    idobj->InsertLast(111);
+    idobj->InsertLast(121);
+    
+    idobj->Display();
+    iRet = idobj->Count();
+
+    idobj->DeleteAtPos(5);
+    
+    idobj->Display();
+    iRet = idobj->Count();
+    return 0;
+}
