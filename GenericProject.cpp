@@ -2507,6 +2507,266 @@ void DisplayUsingIterator(T Arr[], int iSize)
 }
 
 
+
+/* ============================================================
+   13. GENERIC SORTING ALGORITHMS
+   ============================================================ */
+
+template <class T>
+void BubbleSort(T Arr[], int iSize)
+{
+    for (int i = 0; i < iSize - 1; i++)
+    {
+        bool bSwapped = false;
+
+        for (int j = 0; j < iSize - i - 1; j++)
+        {
+            if (Arr[j] > Arr[j + 1])
+            {
+                GenericSwap(Arr[j], Arr[j + 1]);
+                bSwapped = true;
+            }
+        }
+
+        if (!bSwapped)
+        {
+            break;
+        }
+    }
+}
+
+template <class T>
+void SelectionSort(T Arr[], int iSize)
+{
+    for (int i = 0; i < iSize - 1; i++)
+    {
+        int iMin = i;
+
+        for (int j = i + 1; j < iSize; j++)
+        {
+            if (Arr[j] < Arr[iMin])
+            {
+                iMin = j;
+            }
+        }
+
+        if (iMin != i)
+        {
+            GenericSwap(Arr[i], Arr[iMin]);
+        }
+    }
+}
+
+template <class T>
+void InsertionSort(T Arr[], int iSize)
+{
+    for (int i = 1; i < iSize; i++)
+    {
+        T Key = Arr[i];
+        int j = i - 1;
+
+        while (j >= 0 && Arr[j] > Key)
+        {
+            Arr[j + 1] = Arr[j];
+            j--;
+        }
+
+        Arr[j + 1] = Key;
+    }
+}
+
+template <class T>
+int Partition(T Arr[], int iLow, int iHigh)
+{
+    T Pivot = Arr[iHigh];
+    int iIndex = iLow - 1;
+
+    for (int j = iLow; j < iHigh; j++)
+    {
+        if (Arr[j] <= Pivot)
+        {
+            iIndex++;
+            GenericSwap(Arr[iIndex], Arr[j]);
+        }
+    }
+
+    GenericSwap(Arr[iIndex + 1], Arr[iHigh]);
+
+    return iIndex + 1;
+}
+
+template <class T>
+void QuickSort(T Arr[], int iLow, int iHigh)
+{
+    if (iLow < iHigh)
+    {
+        int iPivot = Partition(Arr, iLow, iHigh);
+
+        QuickSort(Arr, iLow, iPivot - 1);
+        QuickSort(Arr, iPivot + 1, iHigh);
+    }
+}
+
+template <class T>
+void Merge(T Arr[], T Temp[], int iLeft, int iMid, int iRight)
+{
+    int i = iLeft;
+    int j = iMid + 1;
+    int k = iLeft;
+
+    while (i <= iMid && j <= iRight)
+    {
+        if (Arr[i] <= Arr[j])
+        {
+            Temp[k++] = Arr[i++];
+        }
+        else
+        {
+            Temp[k++] = Arr[j++];
+        }
+    }
+
+    while (i <= iMid)
+    {
+        Temp[k++] = Arr[i++];
+    }
+
+    while (j <= iRight)
+    {
+        Temp[k++] = Arr[j++];
+    }
+
+    for (i = iLeft; i <= iRight; i++)
+    {
+        Arr[i] = Temp[i];
+    }
+}
+
+template <class T>
+void MergeSort(T Arr[], T Temp[], int iLeft, int iRight)
+{
+    if (iLeft >= iRight)
+    {
+        return;
+    }
+
+    int iMid = (iLeft + iRight) / 2;
+
+    MergeSort(Arr, Temp, iLeft, iMid);
+    MergeSort(Arr, Temp, iMid + 1, iRight);
+    Merge(Arr, Temp, iLeft, iMid, iRight);
+}
+
+template <class T>
+void Heapify(T Arr[], int iSize, int iIndex)
+{
+    int iLargest = iIndex;
+    int iLeft = (2 * iIndex) + 1;
+    int iRight = (2 * iIndex) + 2;
+
+    if (iLeft < iSize && Arr[iLeft] > Arr[iLargest])
+    {
+        iLargest = iLeft;
+    }
+
+    if (iRight < iSize && Arr[iRight] > Arr[iLargest])
+    {
+        iLargest = iRight;
+    }
+
+    if (iLargest != iIndex)
+    {
+        GenericSwap(Arr[iIndex], Arr[iLargest]);
+        Heapify(Arr, iSize, iLargest);
+    }
+}
+
+template <class T>
+void HeapSort(T Arr[], int iSize)
+{
+    for (int i = (iSize / 2) - 1; i >= 0; i--)
+    {
+        Heapify(Arr, iSize, i);
+    }
+
+    for (int i = iSize - 1; i > 0; i--)
+    {
+        GenericSwap(Arr[0], Arr[i]);
+        Heapify(Arr, i, 0);
+    }
+}
+
+
+/* ============================================================
+   14. GENERIC SEARCHING ALGORITHMS
+   ============================================================ */
+
+template <class T>
+int LinearSearch(T Arr[], int iSize, T Key)
+{
+    for (int i = 0; i < iSize; i++)
+    {
+        if (Arr[i] == Key)
+        {
+            return i;
+        }
+    }
+
+    return -1;
+}
+
+template <class T>
+int BinarySearch(T Arr[], int iSize, T Key)
+{
+    int iLow = 0;
+    int iHigh = iSize - 1;
+
+    while (iLow <= iHigh)
+    {
+        int iMid = iLow + (iHigh - iLow) / 2;
+
+        if (Arr[iMid] == Key)
+        {
+            return iMid;
+        }
+
+        if (Arr[iMid] < Key)
+        {
+            iLow = iMid + 1;
+        }
+        else
+        {
+            iHigh = iMid - 1;
+        }
+    }
+
+    return -1;
+}
+
+template <class T>
+int RecursiveBinarySearch(T Arr[], int iLow, int iHigh, T Key)
+{
+    if (iLow > iHigh)
+    {
+        return -1;
+    }
+
+    int iMid = iLow + (iHigh - iLow) / 2;
+
+    if (Arr[iMid] == Key)
+    {
+        return iMid;
+    }
+
+    if (Arr[iMid] < Key)
+    {
+        return RecursiveBinarySearch(Arr, iMid + 1, iHigh, Key);
+    }
+
+    return RecursiveBinarySearch(Arr, iLow, iMid - 1, Key);
+}
+
+
 // ============================================================
 // DEMONSTRATION
 // ============================================================
@@ -2692,6 +2952,34 @@ int main()
 
     cout << "Using Iterator : ";
     DisplayUsingIterator(Languages, iLanguageCount);
+
+
+    // Sorting and Searching
+    cout << "\n----- Sorting and Searching -----\n";
+
+    int SortArray[] = {64, 25, 12, 22, 11};
+    int iSortSize = sizeof(SortArray) / sizeof(SortArray[0]);
+
+    cout << "Original : ";
+    GenericDisplay(SortArray, iSortSize);
+
+    BubbleSort(SortArray, iSortSize);
+
+    cout << "Bubble Sort : ";
+    GenericDisplay(SortArray, iSortSize);
+
+    int SearchArray[] = {10, 20, 30, 40, 50};
+    int iSearchSize = sizeof(SearchArray) / sizeof(SearchArray[0]);
+
+    cout << "Linear Search 30 : "
+         << LinearSearch(SearchArray, iSearchSize, 30) << "\n";
+
+    cout << "Binary Search 40 : "
+         << BinarySearch(SearchArray, iSearchSize, 40) << "\n";
+
+    cout << "Recursive Binary Search 50 : "
+         << RecursiveBinarySearch(SearchArray, 0, iSearchSize - 1, 50)
+         << "\n";
 
     // Hash Table
     cout << "\n----- Hash Table -----\n";
