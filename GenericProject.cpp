@@ -2321,6 +2321,192 @@ void HashTable<K, V>::Display()
 }
 
 
+
+/* ============================================================
+   11. GENERIC ALGORITHMS
+   ============================================================ */
+
+template <class T>
+void GenericSwap(T& First, T& Second)
+{
+    T temp = First;
+    First = Second;
+    Second = temp;
+}
+
+template <class T>
+bool GenericSearch(T Arr[], int iSize, T Key)
+{
+    for (int i = 0; i < iSize; i++)
+    {
+        if (Arr[i] == Key)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+template <class T>
+int GenericFrequency(T Arr[], int iSize, T Key)
+{
+    int iFrequency = 0;
+
+    for (int i = 0; i < iSize; i++)
+    {
+        if (Arr[i] == Key)
+        {
+            iFrequency++;
+        }
+    }
+
+    return iFrequency;
+}
+
+template <class T>
+bool GenericContains(T Arr[], int iSize, T Key)
+{
+    return GenericSearch(Arr, iSize, Key);
+}
+
+template <class T>
+T GenericMax(T Arr[], int iSize)
+{
+    if (iSize <= 0)
+    {
+        throw runtime_error("Array is empty");
+    }
+
+    T Max = Arr[0];
+
+    for (int i = 1; i < iSize; i++)
+    {
+        if (Arr[i] > Max)
+        {
+            Max = Arr[i];
+        }
+    }
+
+    return Max;
+}
+
+template <class T>
+T GenericMin(T Arr[], int iSize)
+{
+    if (iSize <= 0)
+    {
+        throw runtime_error("Array is empty");
+    }
+
+    T Min = Arr[0];
+
+    for (int i = 1; i < iSize; i++)
+    {
+        if (Arr[i] < Min)
+        {
+            Min = Arr[i];
+        }
+    }
+
+    return Min;
+}
+
+template <class T>
+void GenericReverse(T Arr[], int iSize)
+{
+    int iStart = 0;
+    int iEnd = iSize - 1;
+
+    while (iStart < iEnd)
+    {
+        GenericSwap(Arr[iStart], Arr[iEnd]);
+        iStart++;
+        iEnd--;
+    }
+}
+
+template <class T>
+void GenericSort(T Arr[], int iSize)
+{
+    for (int i = 0; i < iSize - 1; i++)
+    {
+        for (int j = 0; j < iSize - i - 1; j++)
+        {
+            if (Arr[j] > Arr[j + 1])
+            {
+                GenericSwap(Arr[j], Arr[j + 1]);
+            }
+        }
+    }
+}
+
+template <class T>
+void GenericDisplay(T Arr[], int iSize)
+{
+    for (int i = 0; i < iSize; i++)
+    {
+        cout << Arr[i] << " ";
+    }
+
+    cout << "\n";
+}
+
+
+/* ============================================================
+   12. GENERIC ITERATOR
+   ============================================================ */
+
+template <class T>
+class GenericIterator
+{
+private:
+    T* Current;
+
+public:
+    GenericIterator(T* Address = NULL)
+    {
+        Current = Address;
+    }
+
+    T& operator*()
+    {
+        return *Current;
+    }
+
+    GenericIterator<T>& operator++()
+    {
+        Current++;
+        return *this;
+    }
+
+    bool operator!=(const GenericIterator<T>& Other) const
+    {
+        return Current != Other.Current;
+    }
+
+    bool operator==(const GenericIterator<T>& Other) const
+    {
+        return Current == Other.Current;
+    }
+};
+
+template <class T>
+void DisplayUsingIterator(T Arr[], int iSize)
+{
+    GenericIterator<T> Begin(Arr);
+    GenericIterator<T> End(Arr + iSize);
+
+    while (Begin != End)
+    {
+        cout << *Begin << " ";
+        ++Begin;
+    }
+
+    cout << "\n";
+}
+
+
 // ============================================================
 // DEMONSTRATION
 // ============================================================
@@ -2465,6 +2651,47 @@ int main()
     cout << "Count     : " << objBST.Count() << "\n";
     cout << "Height    : " << objBST.Height() << "\n";
     cout << "Leaf      : " << objBST.CountLeaf() << "\n";
+
+
+    // Generic Algorithms
+    cout << "\n----- Generic Algorithms -----\n";
+
+    int Numbers[] = {40, 10, 30, 20, 50, 20};
+    int iSize = sizeof(Numbers) / sizeof(Numbers[0]);
+
+    cout << "Original : ";
+    GenericDisplay(Numbers, iSize);
+
+    cout << "Search 30 : "
+         << (GenericSearch(Numbers, iSize, 30) ? "Found" : "Not Found")
+         << "\n";
+
+    cout << "Frequency of 20 : "
+         << GenericFrequency(Numbers, iSize, 20) << "\n";
+
+    cout << "Max : " << GenericMax(Numbers, iSize) << "\n";
+    cout << "Min : " << GenericMin(Numbers, iSize) << "\n";
+
+    GenericSort(Numbers, iSize);
+
+    cout << "Sorted : ";
+    GenericDisplay(Numbers, iSize);
+
+    GenericReverse(Numbers, iSize);
+
+    cout << "Reversed : ";
+    GenericDisplay(Numbers, iSize);
+
+
+    // Generic Iterator
+    cout << "\n----- Generic Iterator -----\n";
+
+    string Languages[] = {"C", "C++", "Java", "Python"};
+    int iLanguageCount =
+        sizeof(Languages) / sizeof(Languages[0]);
+
+    cout << "Using Iterator : ";
+    DisplayUsingIterator(Languages, iLanguageCount);
 
     // Hash Table
     cout << "\n----- Hash Table -----\n";
